@@ -11,6 +11,7 @@ import service.IUserService;
 import util.SecurityUtils;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -24,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        Set<GrantedAuthority> authorities = Set.of(SecurityUtils.converToAuthority(user.getRol().name()));
+        Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) Stream.of(SecurityUtils.converToAuthority(user.getRol().name()));
 
         return UserPrincipal.builder()
                 .user(user).id(user.getId())
